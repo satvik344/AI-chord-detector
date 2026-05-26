@@ -13,11 +13,9 @@ app = FastAPI()
 # -------------------------
 
 app.add_middleware(
-     CORSMiddleware,
-    allow_origins=[
-        "https://softwaremusician.netlify.app"
-    ],
-    allow_credentials=True,
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
