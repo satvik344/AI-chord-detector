@@ -1,227 +1,89 @@
 import librosa
 import numpy as np
 
+CHORDS = {
+    "C": [0, 4, 7],
+    "Cm": [0, 3, 7],
+    "C#": [1, 5, 8],
+    "C#m": [1, 4, 8],
+    "D": [2, 6, 9],
+    "Dm": [2, 5, 9],
+    "D#": [3, 7, 10],
+    "D#m": [3, 6, 10],
+    "E": [4, 8, 11],
+    "Em": [4, 7, 11],
+    "F": [5, 9, 0],
+    "Fm": [5, 8, 0],
+    "F#": [6, 10, 1],
+    "F#m": [6, 9, 1],
+    "G": [7, 11, 2],
+    "Gm": [7, 10, 2],
+    "G#": [8, 0, 3],
+    "G#m": [8, 11, 3],
+    "A": [9, 1, 4],
+    "Am": [9, 0, 4],
+    "A#": [10, 2, 5],
+    "A#m": [10, 1, 5],
+    "B": [11, 3, 6],
+    "Bm": [11, 2, 6],
+}
+
+def match_chord(chroma_vector):
+
+    scores = {}
+
+    for chord, notes in CHORDS.items():
+
+        score = sum(chroma_vector[n] for n in notes)
+
+        scores[chord] = score
+
+    return max(scores, key=scores.get)
 
 def detect_chords(audio_path):
 
-    print("\nLOADING AUDIO...\n")
+    y, sr = librosa.load(
+        audio_path,
+        sr=22050,
+        mono=True,
+        duration=120
+    )
 
-    y, sr = librosa.load(audio_path)
+    hop_length = 4096
 
-    # -------------------------
-    # HARMONIC SEPARATION
-    # -------------------------
-
-    harmonic, _ = librosa.effects.hpss(y)
-
-    y = harmonic
-
-    # -------------------------
-    # BEAT TRACKING
-    # -------------------------
-
-    tempo, beat_frames = librosa.beat.beat_track(
+    chroma = librosa.feature.chroma_cqt(
         y=y,
-        sr=sr
+        sr=sr,
+        hop_length=hop_length
     )
 
-    beat_times = librosa.frames_to_time(
-        beat_frames,
-        sr=sr
+    times = librosa.frames_to_time(
+        np.arange(chroma.shape[1]),
+        sr=sr,
+        hop_length=hop_length
     )
 
-    print(f"\nTempo: {tempo}")
+    chords = []
 
-    print(f"Total Beats: {len(beat_times)}")
+    last_chord = None
+    last_time = 0
 
-    # -------------------------
-    # CHORD DEFINITIONS
-    # -------------------------
+    for i in range(chroma.shape[1]):
 
-    chord_names = [
-        "C", "C#", "D", "D#", "E",
-        "F", "F#", "G", "G#", "A",
-        "A#", "B"
-    ]
+        current_chord = match_chord(chroma[:, i])
 
-    major_template = [0, 4, 7]
+        current_time = float(times[i])
 
-    minor_template = [0, 3, 7]
+        if current_chord != last_chord:
 
-    results = []
+            if current_time - last_time >= 1.5:
 
-    previous_chord = None
+                chords.append({
+                    "time": round(current_time, 1),
+                    "chord": current_chord
+                })
 
-    # -------------------------
-    # HALF-BAR GROUPING
-    # -------------------------
+                last_chord = current_chord
+                last_time = current_time
 
-    beats_per_segment = 2
-
-    for i in range(
-        0,
-        len(beat_times) - beats_per_segment,
-        beats_per_segment
-    ):
-
-        start_time = beat_times[i]
-
-        end_time = beat_times[
-            i + beats_per_segment
-        ]
-
-        start_sample = int(
-            start_time * sr
-        )
-
-        end_sample = int(
-            end_time * sr
-        )
-
-        segment = y[
-            start_sample:end_sample
-        ]
-
-        if len(segment) < 1000:
-            continue
-
-        # -------------------------
-        # CHROMA FEATURES
-        # -------------------------
-
-        chroma = librosa.feature.chroma_cqt(
-            y=segment,
-            sr=sr
-        )
-
-        avg = np.mean(
-            chroma,
-            axis=1
-        )
-
-        avg = avg / (
-            np.sum(avg) + 1e-6
-        )
-
-        best_score = -1
-
-        best_chord = "C"
-
-        # -------------------------
-        # CHORD MATCHING
-        # -------------------------
-
-        for root in range(12):
-
-            # MAJOR
-
-            major_score = sum(
-
-                avg[(root + x) % 12]
-
-                for x in major_template
-
-            )
-
-            if major_score > best_score:
-
-                best_score = major_score
-
-                best_chord = (
-                    chord_names[root]
-                )
-
-            # MINOR
-
-            minor_score = sum(
-
-                avg[(root + x) % 12]
-
-                for x in minor_template
-
-            )
-
-            if minor_score > best_score:
-
-                best_score = minor_score
-
-                best_chord = (
-                    chord_names[root] + "m"
-                )
-
-        # -------------------------
-        # REMOVE DUPLICATES
-        # -------------------------
-
-        if best_chord != previous_chord:
-
-            results.append({
-                "time": round(float(start_time), 1),
-                "chord": best_chord
-            })
-
-            previous_chord = best_chord
-
-    # -------------------------
-    # REMOVE VERY SHORT CHORDS
-    # -------------------------
-
-    filtered = []
-
-    minimum_duration = 1.2
-
-    for i in range(len(results)):
-
-        current = results[i]
-
-        # Keep last chord
-        if i == len(results) - 1:
-
-            filtered.append(current)
-
-            break
-
-        next_chord = results[i + 1]
-
-        duration = (
-            next_chord["time"]
-            -
-            current["time"]
-        )
-
-        # Keep only stable chords
-        if duration >= minimum_duration:
-
-            filtered.append(current)
-
-    # -------------------------
-    # FINAL CLEANING
-    # -------------------------
-
-    cleaned = []
-
-    for chord in filtered:
-
-        if (
-            len(cleaned) == 0
-            or
-            cleaned[-1]["chord"]
-            != chord["chord"]
-        ):
-
-            cleaned.append(chord)
-
-    # -------------------------
-    # DEBUG
-    # -------------------------
-
-    print("\nFINAL CHORDS:")
-    print(len(cleaned))
-
-    print("\nFIRST 20:\n")
-
-    for item in cleaned[:20]:
-
-        print(item)
-
-    return cleaned
+    return chords
