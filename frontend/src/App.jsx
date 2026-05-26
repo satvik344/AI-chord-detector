@@ -65,7 +65,7 @@ function App() {
     try {
 
       const response = await axios.post(
-        'http://127.0.0.1:8000/analyze',
+        'https://ai-chord-detector.onrender.com/analyze',
         formData
       )
 
