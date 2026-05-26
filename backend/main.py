@@ -1,29 +1,36 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-
 import shutil
+import uuid
 import os
-import uuid 
 
 from ai_engine.process_song import process_song
 
 app = FastAPI()
 
-# CORS FIX
+# -------------------------
+# CORS
+# -------------------------
+
 app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
+     CORSMiddleware,
+    allow_origins=[
+        "https://softwaremusician.netlify.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Create uploads folder
-os.makedirs(
-    "uploads",
-    exist_ok=True
-)
+# -------------------------
+# CREATE FOLDERS
+# -------------------------
 
+os.makedirs("uploads", exist_ok=True)
+
+# -------------------------
+# TEST ROUTE
+# -------------------------
 
 @app.get("/")
 def home():
@@ -32,6 +39,9 @@ def home():
         "message": "AI Chord Detector Backend Running"
     }
 
+# -------------------------
+# ANALYZE ROUTE
+# -------------------------
 
 @app.post("/analyze")
 async def analyze(
@@ -40,36 +50,20 @@ async def analyze(
 
     try:
 
-        # SAFE RANDOM FILE NAME
-        safe_name = (
-            str(uuid.uuid4()) + ".mp3"
-        )
+        file_id = str(uuid.uuid4())
 
         file_path = (
-            f"uploads/{safe_name}"
+            f"uploads/{file_id}.mp3"
         )
 
-        # SAVE FILE
-        with open(
-            file_path,
-            "wb"
-        ) as buffer:
+        with open(file_path, "wb") as buffer:
 
             shutil.copyfileobj(
                 audio.file,
                 buffer
             )
 
-        print("\nFILE SAVED:")
-        print(file_path)
-
-        # PROCESS SONG
-        chords = process_song(
-            file_path
-        )
-
-        print("\nTOTAL CHORDS:")
-        print(len(chords))
+        chords = process_song(file_path)
 
         return {
             "success": True,
@@ -78,7 +72,7 @@ async def analyze(
 
     except Exception as e:
 
-        print("\nERROR:")
+        print("\nERROR:\n")
         print(str(e))
 
         return {
