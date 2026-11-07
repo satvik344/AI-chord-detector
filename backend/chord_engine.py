@@ -236,16 +236,17 @@ def analyze_audio(path: str) -> dict[str, Any]:
             "bpm": None,
             "duration": round(duration, 2),
             "analysis_seconds": round(perf_counter() - started, 2),
-            "engine": "Software Musician chroma baseline v1",
+            "engine": "Software Musician STFT chroma v1",
         }
 
-    harmonic, _ = librosa.effects.hpss(signal)
-    chroma = librosa.feature.chroma_cqt(
-        y=harmonic,
+    # STFT chroma keeps memory predictable on small hosted instances. HPSS + CQT
+    # requires several full-track spectral buffers and can exceed a 512 MB limit.
+    chroma = librosa.feature.chroma_stft(
+        y=signal,
         sr=sample_rate,
         hop_length=HOP_LENGTH,
+        n_fft=2048,
         n_chroma=12,
-        n_octaves=6,
         tuning=None,
     )
     chroma = np.maximum(np.asarray(chroma, dtype=np.float32), 0.0)
@@ -307,6 +308,6 @@ def analyze_audio(path: str) -> dict[str, Any]:
         "bpm": bpm,
         "duration": round(duration, 2),
         "analysis_seconds": round(perf_counter() - started, 2),
-        "engine": "Software Musician chroma baseline v1",
+        "engine": "Software Musician STFT chroma v1",
     }
 

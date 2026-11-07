@@ -591,6 +591,11 @@ function startAnalysis() {
     if (state.request !== request) return;
     state.request = null;
     setBusy(false);
+    if (API_BASE_URL) {
+      ui.playerSubtitle.textContent = "Analysis server disconnected";
+      setNotice("The hosted analyzer stopped responding. It may be restarting; wait a minute and retry with a shorter track if it keeps happening.", true);
+      return;
+    }
     ui.playerSubtitle.textContent = "Local analyzer is offline";
     setNotice("Could not reach the local analyzer. Start it with start.bat, then open http://127.0.0.1:8000.", true);
   });

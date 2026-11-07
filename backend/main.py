@@ -72,7 +72,7 @@ async def add_security_headers(request, call_next):
 async def health() -> dict[str, str]:
     return {
         "status": "ok",
-        "engine": "Software Musician chroma baseline v1",
+        "engine": "Software Musician STFT chroma v1",
     }
 
 

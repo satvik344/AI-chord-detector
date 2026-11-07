@@ -24,7 +24,7 @@ The terminal window is the local server. Leave it open while using Software Musi
 
 ## What the analyzer does
 
-The first backend uses harmonic/percussive separation, a constant-Q chromagram, chord-template matching, temporal smoothing, key-profile scoring, and beat tracking. It analyzes the actual recording rather than looking up a song title. The method is a local signal-processing baseline, not a trained deep-learning model. Accuracy can vary with dense mixes, tuning, live recordings, and ambiguous harmony; the visible key confidence is a guide rather than a probability.
+The first backend uses a short-time Fourier transform chromagram, chord-template matching, temporal smoothing, key-profile scoring, and beat tracking. It analyzes the actual recording rather than looking up a song title. The method is a signal-processing baseline, not a trained deep-learning model. Accuracy can vary with dense mixes, tuning, live recordings, and ambiguous harmony; the visible key confidence is a guide rather than a probability.
 
 The practice player keeps the current chord in view, lets you jump to a chord, slow playback, switch between simple and full chord labels, transpose the displayed chord chart, and export a CSV.
 
