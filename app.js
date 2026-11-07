@@ -532,7 +532,7 @@ function exportCsv() {
   const downloadUrl = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
   const anchor = document.createElement("a");
   anchor.href = downloadUrl;
-  anchor.download = `${(state.file?.name || "chordscope").replace(/\.[^.]+$/, "")}-harmony.csv`;
+  anchor.download = `${(state.file?.name || "software-musician").replace(/\.[^.]+$/, "")}-harmony.csv`;
   document.body.append(anchor);
   anchor.click();
   anchor.remove();
@@ -680,3 +680,4 @@ ui.results.addEventListener("click", (event) => {
   if (action === "transpose-up") { state.transpose = Math.min(12, state.transpose + 1); renderResults(); }
   seekToChord(event);
 });
+

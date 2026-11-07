@@ -236,7 +236,7 @@ def analyze_audio(path: str) -> dict[str, Any]:
             "bpm": None,
             "duration": round(duration, 2),
             "analysis_seconds": round(perf_counter() - started, 2),
-            "engine": "ChordScope harmonic chroma v1",
+            "engine": "Software Musician chroma baseline v1",
         }
 
     harmonic, _ = librosa.effects.hpss(signal)
@@ -307,5 +307,6 @@ def analyze_audio(path: str) -> dict[str, Any]:
         "bpm": bpm,
         "duration": round(duration, 2),
         "analysis_seconds": round(perf_counter() - started, 2),
-        "engine": "ChordScope harmonic chroma v1",
+        "engine": "Software Musician chroma baseline v1",
     }
+

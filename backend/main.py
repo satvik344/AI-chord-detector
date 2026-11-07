@@ -35,12 +35,12 @@ MIME_EXTENSIONS = {
 }
 
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("chordscope")
+logger = logging.getLogger("software_musician")
 analysis_slot = asyncio.Semaphore(1)
 
 app = FastAPI(
-    title="ChordScope local analyzer",
-    description="Local audio analysis for chord changes, key, and tempo.",
+    title="Software Musician analyzer",
+    description="Audio analysis for chord changes, key, and tempo.",
     version="0.1.0",
 )
 
@@ -72,7 +72,7 @@ async def add_security_headers(request, call_next):
 async def health() -> dict[str, str]:
     return {
         "status": "ok",
-        "engine": "ChordScope harmonic chroma v1",
+        "engine": "Software Musician chroma baseline v1",
     }
 
 
@@ -94,7 +94,7 @@ async def analyze_track(audio: Annotated[UploadFile, File(...)]) -> dict:
     total_bytes = 0
     try:
         with tempfile.NamedTemporaryFile(
-            prefix="chordscope-",
+            prefix="software-musician-",
             suffix=suffix,
             delete=False,
         ) as temporary:
@@ -158,9 +158,6 @@ async def favicon() -> FileResponse:
     return FileResponse(ROOT / "favicon.svg", media_type="image/svg+xml")
 
 
-@app.get("/config.js")
-async def config() -> FileResponse:
-    return FileResponse(ROOT / "config.js", media_type="text/javascript")
 
 
 @app.get("/icons.svg")
@@ -171,3 +168,4 @@ async def icons() -> FileResponse:
 @app.get("/config.js")
 async def config() -> FileResponse:
     return FileResponse(ROOT / "config.js", media_type="text/javascript")
+

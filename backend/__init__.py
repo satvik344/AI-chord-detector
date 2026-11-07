@@ -1,1 +1,2 @@
-"""ChordScope local analysis backend."""
+"""Software Musician audio analysis backend."""
+

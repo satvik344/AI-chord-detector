@@ -4,17 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0c0d12" />
-    <meta name="description" content="Analyze a track locally, find its chords and key, then play along with an automatically following chord map." />
+    <meta name="description" content="Upload a song to find its chords and key, then follow along with an automatically advancing chord map in Software Musician." />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <link rel="stylesheet" href="./styles.css" />
-    <title>ChordScope — live chord and key finder</title>
+    <title>Software Musician — live chord and key finder</title>
   </head>
   <body>
     <div class="app-shell">
       <header class="topbar">
-        <a class="brand" href="./" aria-label="ChordScope home">
+        <a class="brand" href="./" aria-label="Software Musician home">
           <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
-          <span>chordscope<span class="brand-period">.</span></span>
+          <span>software musician<span class="brand-period">.</span></span>
         </a>
         <div class="topbar-meta"><span class="status-dot"></span> CHORDS THAT FOLLOW THE SONG</div>
       </header>
@@ -32,7 +32,7 @@
               <div class="section-kicker">01 <span>/</span> START PLAYING ALONG</div>
               <h2 id="upload-title">Drop a track. Get its chord map.</h2>
             </div>
-            <div class="engine-pill"><span class="engine-spark">✳</span> LOCAL AUDIO ANALYSIS</div>
+            <div class="engine-pill"><span class="engine-spark">✳</span> CHORD &amp; KEY ANALYSIS</div>
           </div>
 
           <div class="dropzone" id="dropzone" role="group" tabindex="0" aria-label="Audio file upload area. Press Enter or Space to choose a file." aria-describedby="format-note">
@@ -54,7 +54,7 @@
           </div>
 
           <div class="action-row">
-            <p class="format-note" id="format-note"><span class="note-icon" aria-hidden="true">♪</span><span>MP3, WAV, FLAC, M4A · up to 100 MB and 15 minutes · analyzed on this computer</span></p>
+            <p class="format-note" id="format-note"><span class="note-icon" aria-hidden="true">♪</span><span>MP3, WAV, FLAC, M4A · up to 100 MB and 15 minutes · uploaded securely for analysis, then removed</span></p>
             <div class="action-buttons">
               <button class="button button-cancel" id="cancel-analysis" type="button" hidden>Cancel</button>
               <button class="button button-primary" id="analyze-button" type="button" disabled>
@@ -94,9 +94,10 @@
         </div>
       </div>
 
-      <footer class="footer"><span>Your audio stays on this computer.</span><span>KEEP YOUR PLACE <span class="footer-star">✳</span></span></footer>
+      <footer class="footer"><span>The temporary server upload is deleted after analysis.</span><span>KEEP YOUR PLACE <span class="footer-star">✳</span></span></footer>
     </div>
     <script src="./config.js"></script>
     <script type="module" src="./app.js"></script>
   </body>
 </html>
+

@@ -1,6 +1,6 @@
-# ChordScope
+# Software Musician
 
-ChordScope is a local chord-following player. It analyzes an audio file on this computer and returns a timestamped chord map, an estimated key, and a tempo estimate. Uploaded audio is processed in a temporary file and removed when analysis finishes.
+Software Musician is a chord-following player. It analyzes audio and returns a timestamped chord map, an estimated key, and a tempo estimate. When using the hosted site, audio is uploaded over HTTPS to the analyzer and its temporary server copy is removed after processing. Local development sends audio to the local analyzer on the same computer.
 
 ## Start the web app
 
@@ -20,7 +20,7 @@ Use Python 3.11 or newer.
 
 3. Open [http://127.0.0.1:8000](http://127.0.0.1:8000).
 
-The terminal window is the local server. Leave it open while using ChordScope; press `Ctrl+C` there to stop it.
+The terminal window is the local server. Leave it open while using Software Musician; press `Ctrl+C` there to stop it.
 
 ## What the analyzer does
 
@@ -30,7 +30,7 @@ The practice player keeps the current chord in view, lets you jump to a chord, s
 
 ## API
 
-- `GET /api/health` reports whether the local analyzer is running.
+- `GET /api/health` reports whether the analyzer is running.
 - `POST /api/analyze` accepts one multipart audio field named `audio`.
 - `GET /docs` shows the automatically generated local API reference.
 
@@ -41,7 +41,7 @@ The upload limit is 100 MB and the track limit is 15 minutes. WAV, MP3, FLAC, OG
 The UI is a static Netlify site. Audio analysis runs on a separate Python web service because uploads and analysis can exceed Netlify Function request and runtime limits.
 
 1. Push this project to a Git repository and import it into Netlify. The included `netlify.toml` builds only the browser assets into `dist/`, so Python source files are not part of the published site.
-2. Create a Render Blueprint from the repository using `render.yaml`. Select a service plan with enough memory for audio analysis. Set `CORS_ORIGINS` to the exact Netlify site origin, such as `https://your-site.netlify.app` (no trailing slash).
+2. Create a Render Blueprint from the repository using `render.yaml`. It selects Render's Free plan for initial setup. Set `CORS_ORIGINS` to the exact Netlify site origin, such as `https://your-site.netlify.app` (no trailing slash).
 3. Copy the Render service's public origin, then set the Netlify build environment variable `CHORDSCOPE_API_BASE` to that origin, such as `https://softwaremusician-api.onrender.com` (no trailing slash). Trigger a new deploy after setting it.
 
 The Netlify build script injects the API origin into `dist/config.js`. For local development, the root `config.js` remains empty and the browser uses the same-origin FastAPI service.
@@ -51,3 +51,4 @@ The backend currently has no account system or per-user rate limit. Before promo
 ## Improving accuracy
 
 The next useful step is calibration with a small set of tracks across genres, including known chord charts and a few user corrections. That gives us measurable accuracy targets before replacing or combining the baseline with a trained chord-recognition model. A competitive model will need a labeled evaluation set and a hosting plan if it should run for users outside this computer.
+
