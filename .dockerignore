@@ -1,0 +1,7 @@
+.git
+.venv
+dist
+.netlify
+__pycache__
+*.py[cod]
+*.log

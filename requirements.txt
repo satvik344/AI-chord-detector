@@ -1,8 +1,8 @@
-fastapi
-uvicorn
-python-multipart
-librosa
-numpy
-scipy
-soundfile
-audioread
+fastapi>=0.115,<1
+uvicorn>=0.34,<1
+python-multipart>=0.0.20,<1
+librosa>=0.11,<1
+numpy>=2,<3
+scipy>=1.13,<2
+soundfile>=0.13,<1
+audioread>=3,<4

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0c0d12" />
+    <meta name="description" content="Analyze a track locally, find its chords and key, then play along with an automatically following chord map." />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="stylesheet" href="./styles.css" />
+    <title>ChordScope — live chord and key finder</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="ChordScope home">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+          <span>chordscope<span class="brand-period">.</span></span>
+        </a>
+        <div class="topbar-meta"><span class="status-dot"></span> CHORDS THAT FOLLOW THE SONG</div>
+      </header>
+
+      <main>
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="eyebrow"><span class="eyebrow-line"></span> PLAY ALONG, IN REAL TIME</div>
+          <h1 id="hero-title">Chords that<br /><span>stay in step.</span></h1>
+          <p class="hero-copy">Get the chord changes and song key, then follow each chord as your track plays.</p>
+        </section>
+
+        <section class="studio-card" aria-labelledby="upload-title">
+          <div class="section-heading">
+            <div>
+              <div class="section-kicker">01 <span>/</span> START PLAYING ALONG</div>
+              <h2 id="upload-title">Drop a track. Get its chord map.</h2>
+            </div>
+            <div class="engine-pill"><span class="engine-spark">✳</span> LOCAL AUDIO ANALYSIS</div>
+          </div>
+
+          <div class="dropzone" id="dropzone" role="group" tabindex="0" aria-label="Audio file upload area. Press Enter or Space to choose a file." aria-describedby="format-note">
+              <div class="upload-symbol" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14.5v3A2.5 2.5 0 0 0 7.5 20h9a2.5 2.5 0 0 0 2.5-2.5v-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              </div>
+              <div class="dropzone-copy">
+                <strong id="drop-title">Drop your audio here</strong>
+                <span id="drop-subtitle">or choose a file from your device</span>
+              </div>
+              <button class="button button-quiet" id="choose-file" type="button">Choose audio <span aria-hidden="true">↗</span></button>
+              <input id="file-input" type="file" accept="audio/*" hidden />
+          </div>
+
+          <div class="track-row" id="track-row" hidden>
+            <div class="track-art" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="track-info"><strong id="track-name"></strong><span id="track-meta"></span></div>
+            <button class="text-button" id="remove-track" type="button" aria-label="Remove selected track">Remove <span aria-hidden="true">×</span></button>
+          </div>
+
+          <div class="action-row">
+            <p class="format-note" id="format-note"><span class="note-icon" aria-hidden="true">♪</span><span>MP3, WAV, FLAC, M4A · up to 100 MB and 15 minutes · analyzed on this computer</span></p>
+            <div class="action-buttons">
+              <button class="button button-cancel" id="cancel-analysis" type="button" hidden>Cancel</button>
+              <button class="button button-primary" id="analyze-button" type="button" disabled>
+                <span id="analyze-label">Analyze track</span>
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h11m0 0-4-4m4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="analysis-progress" id="analysis-progress" hidden>
+            <div class="progress-copy"><span class="progress-spinner" aria-hidden="true"></span><span id="progress-label">Preparing your track…</span><span class="progress-percent" id="progress-percent"></span></div>
+            <div class="progress-track"><span id="progress-fill"></span></div>
+          </div>
+          <p class="notice" id="notice" role="status" aria-live="polite" hidden></p>
+        </section>
+
+        <section class="results" id="results" aria-live="polite" hidden></section>
+      </main>
+
+      <div class="player-dock" id="player-dock" hidden>
+        <div class="player-dock-inner">
+          <div class="dock-track">
+            <span class="dock-playing-dot" aria-hidden="true"></span>
+            <span class="dock-track-copy"><strong id="player-title">No track selected</strong><span id="player-subtitle">Choose a track to begin</span></span>
+          </div>
+          <audio id="audio-player" class="audio-player" controls preload="metadata" aria-label="Track player" hidden></audio>
+          <label class="speed-control">Speed
+            <select id="playback-speed" aria-label="Playback speed">
+              <option value="0.7">0.7×</option>
+              <option value="0.8">0.8×</option>
+              <option value="0.9">0.9×</option>
+              <option value="1" selected>1×</option>
+              <option value="1.1">1.1×</option>
+              <option value="1.25">1.25×</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <footer class="footer"><span>Your audio stays on this computer.</span><span>KEEP YOUR PLACE <span class="footer-star">✳</span></span></footer>
+    </div>
+    <script src="./config.js"></script>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
