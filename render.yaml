@@ -2,6 +2,7 @@ services:
   - type: web
     name: softwaremusician-api
     runtime: docker
+    plan: free
     dockerfilePath: ./Dockerfile
     dockerContext: .
     healthCheckPath: /api/health
