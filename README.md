@@ -34,7 +34,7 @@ The practice player keeps the current chord in view, lets you jump to a chord, s
 - `POST /api/analyze` accepts one multipart audio field named `audio`.
 - `GET /docs` shows the automatically generated local API reference.
 
-The upload limit is 100 MB and the track limit is 15 minutes. WAV, MP3, FLAC, OGG, and AIFF are the best-supported formats. Some M4A, AAC, Opus, and WebM files may need FFmpeg installed for decoding.
+The upload limit is 100 MB and the track limit is 8 minutes on the current low-memory service plan. WAV, MP3, FLAC, OGG, and AIFF are the best-supported formats. Some M4A, AAC, Opus, and WebM files may need FFmpeg installed for decoding.
 
 ## Deploy to Netlify + Render
 

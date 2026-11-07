@@ -1,7 +1,7 @@
 const API_BASE_URL = String(window.CHORDSCOPE_API_BASE || "").replace(/\/+$/, "");
 const ANALYZE_URL = `${API_BASE_URL}/api/analyze`;
 const MAX_FILE_BYTES = 100 * 1024 * 1024;
-const MAX_TRACK_SECONDS = 15 * 60;
+const MAX_TRACK_SECONDS = 8 * 60;
 const AUDIO_EXTENSIONS = /\.(mp3|wav|m4a|aac|ogg|oga|flac|aif|aiff|opus|webm)$/i;
 const $ = (id) => document.getElementById(id);
 const ui = {

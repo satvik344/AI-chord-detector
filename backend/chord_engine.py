@@ -227,8 +227,8 @@ def analyze_audio(path: str) -> dict[str, Any]:
     if not np.all(np.isfinite(signal)):
         signal = np.nan_to_num(signal)
     duration = float(signal.size / sample_rate)
-    if duration > 15 * 60:
-        raise ValueError("This recording is longer than 15 minutes. Use a shorter track for now.")
+    if duration > 8 * 60:
+        raise ValueError("This recording is longer than the 8-minute limit on the current service.")
     if float(np.max(np.abs(signal))) < 1e-5:
         return {
             "chords": [],
