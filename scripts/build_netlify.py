@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import shutil
 from pathlib import Path
 
 
@@ -15,13 +16,11 @@ def main() -> None:
     if api_base and not api_base.startswith("https://"):
         raise SystemExit("CHORDSCOPE_API_BASE must be an https:// URL when deploying publicly.")
 
+    # Netlify may reuse a previous build's publish directory. Rebuild it cleanly
+    # so stale files cannot break deployment or leak into the published site.
+    if PUBLISH.exists():
+        shutil.rmtree(PUBLISH)
     PUBLISH.mkdir(parents=True, exist_ok=True)
-
-    expected_files = set(STATIC_FILES) | {"config.js"}
-    unexpected = [entry.name for entry in PUBLISH.iterdir() if entry.name not in expected_files]
-    if unexpected:
-        names = ", ".join(sorted(unexpected))
-        raise SystemExit(f"Refusing to publish unexpected existing files in dist/: {names}")
 
     for filename in STATIC_FILES:
         (PUBLISH / filename).write_bytes((ROOT / filename).read_bytes())
@@ -33,3 +32,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
